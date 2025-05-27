@@ -1,0 +1,6 @@
+webdavclient3
+langchain
+faiss-cpu
+pypdf2
+openai
+python-dotenv

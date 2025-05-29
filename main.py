@@ -155,7 +155,7 @@ class DocumentProcessor:
         print(f"Total de itens na coleção '{self.collection_name}': {count}")
         return count
 
-    def query(self, query_text: str, n_results: int = 2):
+    def query(self, query_text: str, n_results: int = 6):
         """
         Faz uma consulta na coleção.
 
@@ -181,18 +181,9 @@ class DocumentProcessor:
 
 # --- Exemplo de uso ---
 if __name__ == "__main__":
-    DATA_DIR = "data_example"
+    DATA_DIR = "data"
     CHROMA_DIR = "chroma_db"
     COLLECTION_NAME = "utfpr"
-
-    # Cria pasta e arquivos de exemplo se não existirem
-    if not os.path.exists(DATA_DIR):
-        os.makedirs(DATA_DIR)
-        with open(os.path.join(DATA_DIR, "exemplo1.txt"), "w", encoding="utf-8") as f:
-            f.write("Este é o primeiro documento de exemplo sobre leis e informações.")
-        with open(os.path.join(DATA_DIR, "exemplo2.txt"), "w", encoding="utf-8") as f:
-            f.write("A lei número 123 aborda aspectos importantes do processo legal.")
-        print(f"Pasta '{DATA_DIR}' criada com arquivos de exemplo.")
 
     try:
         processor = DocumentProcessor(

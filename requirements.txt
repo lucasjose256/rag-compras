@@ -7,3 +7,5 @@ python-dotenv
 langchain_community
 chromadb
 sentence-transformers
+Flask 
+flask-cors

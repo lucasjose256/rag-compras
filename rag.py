@@ -10,6 +10,7 @@ import os
 
 
 class DocumentProcessor:
+    
     def __init__(self, data_path: str = "data", chroma_path: str = "chroma_db"):
         self.data_path = data_path
         self.chroma_path = chroma_path

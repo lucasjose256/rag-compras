@@ -236,6 +236,60 @@ class DocumentProcessor:
             # return full_response_text # Descomente se precisar retornar o texto completo
 
             return None
+    def query_async(self,user_query,  n_results: int = 6):
+
+            model = genai.GenerativeModel('gemini-1.5-flash') # ou 'gemini-1.5-pro-latest', 'gemini-pro'
+      
+
+            results = self.collection.query(
+                query_texts=[user_query],
+                n_results=n_results
+            )
+            # print("\nResultados da consulta:")
+            # for i, doc in enumerate(results['documents'][0]):
+            #     print(f"Resultado {i+1}: {doc}")
+            #     if results['metadatas'] and results['metadatas'][0] and len(results['metadatas'][0]) > i:
+            #         print(f"  Metadados: {results['metadatas'][0][i]}")
+            #     print("-" * 20)
+            system_prompt = f"""
+            Você é um assistente especializado em responder perguntas com base nos dados fornecidos.  
+            Sua missão é utilizar ao máximo as informações disponíveis, inferindo respostas sempre que possível, sem inventar ou recorrer a conhecimento externo.  
+
+            **Regras para suas respostas:**  
+            - Se houver informações suficientes, responda de forma **clara, direta e objetiva**.  
+            - Se as informações forem **parciais**, tente **inferir** a melhor resposta possível, explicando sua lógica.  
+            - Se não houver **dados suficientes**, seja honesto e responda apenas: `"Não sei com certeza, mas com base no contexto, posso inferir que..."` ou `"Não tenho informações suficientes para responder com precisão."`  
+            - **Nunca invente fatos** ou forneça respostas baseadas em suposições sem justificativa.  
+
+            🔍 **Contexto disponível:**  
+            {str(results['documents'])}
+            """
+
+            prompt = f"{system_prompt}\n\nUsuário: {user_query}"
+
+           # response = model.generate_content(prompt, stream=True)
+
+        #    print("\nResposta do Assistente:")
+            full_response_text = ""
+            try:
+                # Use stream=True para obter a resposta em partes
+                response_stream = model.generate_content(prompt, stream=True)
+
+                for chunk in response_stream:
+                    if chunk.text: # Verifica se o chunk tem texto
+                        print(chunk.text, end="", flush=True) # Imprime o texto do chunk sem nova linha e força a saída
+                        full_response_text += chunk.text
+            except Exception as e:
+                print(f"\nOcorreu um erro ao gerar a resposta: {e}")
+                # Você pode querer lidar com diferentes tipos de erros aqui,
+                # como google.generativeai.types.BlockedPromptException
+
+            print("\n\n---------------------\n")
+            # O return original era response.text. Com streaming, você constrói o texto completo.
+            # Se você ainda precisa retornar o texto completo, use full_response_text
+            # return full_response_text # Descomente se precisar retornar o texto completo
+
+            return full_response_text
 
 
 

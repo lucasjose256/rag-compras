@@ -109,19 +109,15 @@ class DocumentProcessor:
                 ]
                 for future in future_docs:
                     self.raw_documents.extend(future.result())
-        elif file_paths_to_load:  # Carregamento sequencial se parallel_loading for False
+        elif file_paths_to_load: 
             for fp, lc, la, lk in file_paths_to_load:
                 self.raw_documents.extend(
                     self._load_single_file(fp, lc, la, lk))
 
         if not self.raw_documents:
-            # Se raw_documents ainda estiver vazio após todas as tentativas
             print(
                 "⚠️ Nenhum documento foi carregado com sucesso. Verifique os logs de erro.")
-            # Você pode querer levantar um ValueError aqui ou permitir que o fluxo continue
-            # dependendo se ter documentos é absolutamente crítico para os próximos passos.
-            # raise ValueError("Nenhum documento foi carregado com sucesso.")
-            return  # Retorna para evitar erro no split de lista vazia
+            
 
         print(f"📄 Total de documentos carregados: {len(self.raw_documents)}")
 
